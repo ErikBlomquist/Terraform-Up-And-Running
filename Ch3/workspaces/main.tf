@@ -1,3 +1,8 @@
+# Workspaces
+# 1. terraform workspace new example1
+# 2. terraform workspace list
+# 3. terraform workspace select example1
+
 terraform {
   required_version = ">= 0.12, < 0.13"
 }
