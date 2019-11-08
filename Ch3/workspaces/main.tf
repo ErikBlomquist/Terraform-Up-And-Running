@@ -10,24 +10,19 @@ provider "aws" {
 }
 
 terraform {
-  backend "s3" {
+    backend "s3" {
+        bucket          = "kork-test"
+        key             = "workspaces/terraformtfstate"
+        region          = "us-east-2"
 
-    # This backend configuration is filled in automatically at test time by Terratest. If you wish to run this example
-    # manually, uncomment and fill in the config below.
-
-    # bucket         = "<YOUR S3 BUCKET>"
-    # key            = "<SOME PATH>/terraform.tfstate"
-    # region         = "us-east-2"
-    # dynamodb_table = "<YOUR DYNAMODB TABLE>"
-    # encrypt        = true
-
-  }
+        dynamodb_table  = "kork-test-locks"
+        encrypt         = true
+    }
 }
 
 resource "aws_instance" "example" {
-  ami           = "ami-0c55b159cbfafe1f0"
-
-  instance_type = terraform.workspace == "default" ? "t2.medium" : "t2.micro"
-
+    ami = "ami-0c55b159cbfafe1f0"
+    # Set instance type to t2.medium in default workspace and t2.micro in all other.
+    # instance_type = terraform.workspace == "default" ? "t2.medium" : "t2.micro"
+    instance_type = "t2.micro"
 }
-
