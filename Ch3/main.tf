@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "terraform_state" {
-    bucket = "terraform-up-and-running-state"
+    bucket = "korkbots-terraform-up-and-running-state"
 
     # Prevent accidental deletion of this S3 bucket
     lifecycle {
@@ -34,5 +34,18 @@ resource "aws_dynamodb_table" "terraform_locks" {
     attribute {
         name = "LockID"
         type = "S"
+    }
+}
+
+terraform {
+    backend "s3" {
+        # Enter bucket name
+        bucket          = "korkbots-terraform-up-and-running-state"
+        key             = "workspaces-example/terraform.tfstate"
+        region          = "us-east-2"
+
+        # Replace this with your DynamoDB table name
+        dynamodb_table  = "terraform-up-and-running-locks"
+        encrypt         = true
     }
 }
